@@ -1,0 +1,81 @@
+.cta-button{
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-decoration: none;
+    font-weight: 700;
+    line-height: 3.2rem;
+    transition: all 0.2s ease-in-out;
+    padding-left: 0;
+    padding-right: 0;
+    cursor: pointer;
+    span{
+        font-size: 1.8rem;
+        color: $text-color;
+    }
+    &__svg-container{
+        margin-left: 1.8rem;
+        border: 0.2rem solid #43D5EC;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        padding: 1.3rem 0.9rem;
+        transition: all 0.3s ease-in-out;
+    }
+    svg{
+        transition: all 0.3s ease-in-out;
+    }
+    &.text-none{
+        span{
+            display: none;
+        }
+    }
+    &:hover{
+        text-decoration: none;
+        span{
+            color: $text-hover-color;
+        }
+        svg{
+            path{
+                fill: #FFF;
+            }
+        }
+        .cta-button__svg-container{
+            margin-left: 2.3rem;
+            background-color: #43D5EC;
+        }
+    }
+}
+
+.default-btn{
+    background-color: $button-bg-color;
+    border: none;
+    color: $white;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    padding: 1.2rem 1.6rem;
+    border-radius: 0.4rem;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    &:hover{
+        background-color: $button-bg-hover-color;
+    }
+}
+
+.we-are-hire-btn{
+    color: $white;
+    font-size: 1.8rem;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    img{
+        margin-right: 2.1rem;
+    }
+    &:hover{
+        text-decoration: none;
+        color: $white;
+    }
+}

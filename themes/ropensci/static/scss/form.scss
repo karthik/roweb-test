@@ -1,0 +1,37 @@
+.newsletter{
+    form{
+        display: flex;
+        flex-direction: column;
+        input{
+            padding: 1.6rem 1.8rem;
+            border: 2px solid rgba(82, 92, 113, 0.2);
+            flex-grow: 2.5;
+            font-size: 1.8rem;
+            border-radius: 0.4rem 0rem 0rem 0.4rem;
+        }
+        button{
+            font-size: 1.8rem;
+            border: none;
+            background: #51B2B2;
+            border-radius: 0px 0.4rem 0.4rem 0px;
+            flex-grow: 1;
+            color: $white;
+        }
+        .input-container{
+            margin-bottom: 0.8rem;
+        }
+        .checkbox-container{
+            margin-top: 1.8rem;
+        }
+        p{
+            font-size: 1.4rem;
+            margin-left: 1.4rem;
+        }
+    }
+}
+
+.form-error{
+    font-size: 1.4rem;
+    color: #D51A1A;
+    
+}

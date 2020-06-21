@@ -1,0 +1,55 @@
+.footer{
+    color: #fff;
+    padding: 3.5em 0 1em;
+    position: relative;
+    background: linear-gradient(94.45deg, #64A4EF 1.55%, #427FD4 98.46%);
+    overflow: hidden;
+    ul{
+        flex-direction: column;
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        li{
+            margin-bottom: 2.4rem;
+            a{
+                text-decoration: none;
+                color: $white;
+                font-size: 1.8rem;
+                font-weight: 100;
+                svg{
+                    margin-left: 1rem;
+                    margin-top: -0.75rem;
+                }
+            }
+        }
+    }
+    &-container{
+        z-index: 111;
+        position: relative;
+    }
+    &-menu{
+        &__heading{
+            margin-bottom: 2.4rem;
+            display: block;
+            font-weight: bold;
+        }
+    }
+    &__social-row{
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        padding: 0rem 0rem 6rem 0rem;
+        img{
+            width: 3.2rem;
+            height: auto;
+            margin: 0 1.8rem;
+        }
+    }
+    &:after{
+        content: url(../img/cube-footer-large.svg);
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        position: absolute;
+    }
+}

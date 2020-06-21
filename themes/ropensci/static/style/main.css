@@ -1,0 +1,51 @@
+.section-heading {
+  padding-bottom: 2.7rem;
+  padding-top: 5.4rem; }
+
+.section-description {
+  padding-bottom: 2.7rem;
+  margin-bottom: 0; }
+
+.section-cta-button {
+  margin-bottom: 5.4rem; }
+
+.our-packages, .our-community, .review-process, .latest-news, .newsletter, .working-together {
+  padding-bottom: 6rem; }
+
+.newsletter__row {
+  padding-top: 5.7rem; }
+
+.working-together span, .working-together p, .working-together h1, .working-together h2 {
+  display: block;
+  text-align: center; }
+
+.working-together h2 {
+  margin-top: 5.4rem;
+  margin-bottom: 1.8rem; }
+
+.working-together__row {
+  padding-top: 6.5rem; }
+
+.our-packages__row-block:after {
+  content: url(../img/packages-after.svg);
+  left: 0;
+  top: 0;
+  position: absolute;
+  padding: 1.85rem 0rem 0rem 2.625rem; }
+
+.our-packages__row-block p {
+  margin-bottom: 0; }
+
+.our-packages__row-block .small-paragraph {
+  text-decoration: none !important; }
+
+.our-packages__row-block:hover {
+  text-decoration: none; }
+  .our-packages__row-block:hover .small-heading {
+    text-decoration: underline !important; }
+
+.our-packages .section-cta-button {
+  margin-bottom: 3.6rem; }
+
+.our-packages .section-heading {
+  padding-top: 3.6rem; }

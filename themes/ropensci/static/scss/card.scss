@@ -1,0 +1,106 @@
+.default-card{
+    padding: 0;
+    display: flex;
+    flex-grow: 1;
+    transition: 0.3s ease-in-out;
+    color: $text-color;
+    &__inner{
+        margin: 0rem 1rem 1.8rem 1rem;
+        padding: 3.6rem;
+        background-color: $white;
+        box-shadow: 0px 2px 12px rgba(176, 173, 198, 0.21);
+        border-radius: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: flex-start;
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        overflow: hidden;
+        z-index: 55;
+        img{
+            margin-bottom: 2.7rem;
+            display: block;
+        }
+        .medium-paragraph{
+            margin-bottom: 2.7rem;
+        }
+        &-mark{
+            background: #51B2B2;
+            border-radius: 0.4rem;
+            font-size: 1.4rem;
+            padding: 0.4rem 0.8rem;
+            color: $white;
+            margin-bottom: 2.7rem;
+        }
+        &-date{
+            font-size: 1.4rem;
+            color: #333333;
+            margin-left: 1rem;
+            margin-bottom: 2.7rem;
+        }
+        &-user{
+            margin-top: 2.7rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2F80ED !important;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            img{
+                margin-right: 0.8rem;
+                margin-bottom: 0;
+            }
+        }
+    }
+    &:hover{
+        transform: translateY(-0.2rem);
+        .default-card__inner{
+            box-shadow: 0px 8px 16px #D8E1F5;
+        }
+    }
+    &.colored{
+        color: $white;
+        .default-card__inner{
+            background: #64A4EF 98.46%;
+            span,p,h1,h2{
+                color: $white;
+                z-index: 11;
+                position: relative;
+            }
+            &:after{
+                content: url(../img/cube-card-colored.svg);
+                top: 0.125rem;
+                right: 0;
+                position: absolute;
+            }
+        }
+        &:after{
+            content: '';
+        }
+        &:hover{
+            transform: translateY(-0.4rem);
+            .default-card__inner{
+                transition: 0.2s ease-in-out;
+                background: #1A5FD0 !important;
+                box-shadow: 0px 3px 3px rgba(69, 123, 205, 0.7);
+            }
+            .cta-button{
+                &__svg-container{
+                    background: #65D0D0;
+                    margin-left: 0.5rem !important;
+                }
+            }
+            .small-heading{
+                color: $white !important;
+                text-decoration: underline !important;
+            }
+        }
+    }
+    .toggle-mobile-icon{
+        display: none;
+    }
+}

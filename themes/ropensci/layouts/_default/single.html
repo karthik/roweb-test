@@ -1,0 +1,38 @@
+{{ define "main" }}
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-2 sidebar top-5">
+                <ul class="autoSidebar"></ul>
+            </div> <!-- /navigation sidebar -->
+        </div>
+        <div class="row">
+            <div class="col-offset-2 col-8 top-20">
+                <h2 style="text-align: center;">{{ .Title }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 col-offset-2 top-4">
+
+                {{ .Content }}
+</div>
+            </div>
+        </div>
+</article>
+{{$pages := .Site.Pages.ByPublishDate.Reverse}}
+{{ if .Params.partials }}
+  {{ range $elem_val := $.Params.partials }}
+      <br></br>
+      {{if (eq $elem_val "archive.html")}}
+        {{ partial "archive.html" (dict "pages" $pages) }}
+          <div class="row center top-3 bottom-3">
+<p> Find all blog posts, tech notes and community calls <a href="/tags/" target="_blank">by tag</a> and <a href="/authors/" target="_blank">by author</a>. </p>
+          </div>
+      {{else}}
+        {{ partial $elem_val (dict "Site" $.Site "Data" $.Site.Data) }}
+
+        
+      {{end}}
+  {{ end }}
+{{ end }}
+{{ end }}

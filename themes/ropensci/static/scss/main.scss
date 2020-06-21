@@ -1,0 +1,201 @@
+.section-heading{
+    padding-bottom: 2.7rem;
+    padding-top: 5.4rem;
+}
+
+.section-description{
+    padding-bottom: 2.7rem;
+    margin-bottom: 0;
+    max-width: 74rem;
+}
+
+.section-cta-button{
+    margin-bottom: 5.4rem;
+}
+
+.our-packages, .our-community, .review-process, .latest-news, .newsletter, .working-together{
+    padding-bottom: 6rem;
+}
+
+.newsletter{
+    &__row{
+        padding-top: 5.7rem;
+    }
+}
+
+.working-together{
+    span, p, h1, h2{
+        display: block;
+        text-align: center;
+    }
+    h2{
+        margin-top: 5.4rem;
+        margin-bottom: 1.8rem;
+    }
+    &__row{
+        padding-top: 6.5rem;
+    }
+}
+
+.our-packages{
+    &__row{
+        &-block{
+            &__top{
+                .toggle-mobile-icon{
+                    display: none;
+                }
+                &:after{
+                    content: url(../img/packages-after.svg);
+                    left: 1.7rem;
+                    top: 1.55rem;
+                    position: absolute;
+                    z-index: 0;
+                }
+            }
+            p{
+                margin-bottom: 0;
+            }
+            .small-paragraph{
+                color: $text-color;
+                text-decoration: none !important;
+            }
+            &:hover{
+                text-decoration: none;
+                .small-heading{
+                    text-decoration: underline !important;
+                }
+            }
+        }
+    }
+    &__first-row{
+        .cta-button{
+            display: none;
+        }
+    }
+    .section-cta-button{
+        margin-bottom: 3.6rem;
+    }
+    .section-heading{
+        padding-top: 3.6rem;
+    }
+}
+
+.review-process, .our-community{
+    &__row{
+        &-block{
+            .default-card{
+                &__inner{
+                    padding-top: 3rem;
+                    padding-bottom: 3.8rem;
+                    margin-left: 1.7rem;
+                    margin-right: 1.7rem;
+                    p, span, h1, h2{
+                        color: $text-color;
+                    }
+                    &:hover{
+                        text-decoration: none;
+                        .cta-button{
+                            span{
+                                color: $text-hover-color;
+                            }
+                            svg{
+                                path{
+                                    fill: $white !important;
+                                }
+                            }
+                            &__svg-container{
+                                background-color: #43D5EC;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__top{
+        margin-top: 5.4rem;
+        margin-bottom: 5rem;
+        .section-description{
+            padding-bottom: 3.6rem;
+        }
+    }
+}
+
+.latest-news{
+    .section-heading{
+        padding-bottom: 3.6rem;
+    }
+    &__row{
+        &-block{
+            .default-card{
+                &__inner{
+                    margin: 1.8rem 1.5rem;
+                    .small-heading{
+                        color: $text-color;
+                    }
+                    &:hover{
+                       text-decoration: none;
+                       .small-heading{
+                           text-decoration: underline;
+                           color: #1A5FD0;
+                       }
+                       .cta-button{
+                            span{
+                                color: $text-hover-color;
+                            }
+                            svg{
+                                path{
+                                    fill: $white !important;
+                                }
+                            }
+                            &__svg-container{
+                                background-color: #43D5EC;
+                            }
+                        }
+                    }
+                    &-mark{
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+    &__top-heading{
+        padding: 5.6rem 0rem 3.6rem 0rem;
+    }
+}
+
+.newsletter{
+    .default-card{
+        &__inner{
+            flex-grow: 0;
+            .medium-paragraph{
+                max-width: 28rem;
+            }
+        }
+    }
+    &__right-block{
+        position: relative;
+        z-index: 11;
+        h1,h2,span,p{
+            position: relative;
+            z-index: 11;
+        }
+        &:after{
+            content: url(../img/newsletter-cube.svg);
+            left: -6.75rem;
+            top: -4.25rem;
+            z-index: 1;
+            position: absolute;
+        }
+        p{
+            max-width: 34rem;
+        }
+    }
+}
+
+.our-community{
+    .section-description{
+        max-width: 45rem;
+    }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+{{ partial "head.html" . }}
+</head>
+<body>
+{{ partial "header.html" . }}
+
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-2 sidebar top-5">
+                <ul class="autoSidebar"></ul>
+            </div> <!-- /navigation sidebar -->
+        </div>
+        <div class="row">
+            <div class="col-offset-2 col-8 top-20">
+                <h2 style="text-align: center;">Missing page</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8 col-offset-2 top-4 bottom-5">
+
+{{ readFile "404.md" | markdownify  }}
+
+</div>
+            </div>
+        </div>
+</article>
+{{ partial "footer.html" . }}
+</body>
+</html>

@@ -1,0 +1,527 @@
+---
+title: elastic tutorial
+package_version: 1.0.0
+---
+
+
+
+`elastic` is an R client for [Elasticsearch](https://www.elastic.co/products/elasticsearch). This tutorial is an introduction to the package.
+
+
+### Installation
+
+You can install from CRAN
+
+
+```r
+install.packages("elastic")
+```
+
+Or the development version from GitHub
+
+
+```r
+install.packages("devtools")
+devtools::install_github("ropensci/elastic")
+```
+
+Then load the package
+
+
+```r
+library("elastic")
+```
+
+### Elasticsearch
+
+**Elasticsearch info**
+
++ [Elasticsearch home page](https://www.elastic.co/products/elasticsearch)
++ [API docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+
+**Install Elasticsearch**
+
+* [Elasticsearch installation help](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html)
+
+__w/ Docker__
+
+Pull the official elasticsearch image
+
+```
+docker pull elasticsearch
+```
+
+Then start up a container
+
+```
+docker run -d -p 9200:9200 elasticsearch
+```
+
+Then elasticsearch should be available on port 9200, try `curl localhost:9200` and you should get the familiar message indicating ES is on.
+
+If you're using boot2docker, you'll need to use the IP address in place of localhost. Get it by doing `boot2docker ip`.
+
+__on OSX__
+
++ Download zip or tar file from Elasticsearch [see here for download](https://www.elastic.co/downloads), e.g., `curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.1.1-darwin-x86_64.tar.gz`
++ Extract: `tar -zxvf elasticsearch-7.1.1-darwin-x86_64.tar.gz`
++ Move it: `sudo mv elasticsearch-7.1.1 /usr/local`
++ Navigate to /usr/local: `cd /usr/local`
++ Delete symlinked `elasticsearch` directory: `rm -rf elasticsearch`
++ Add shortcut: `sudo ln -s elasticsearch-7.1.1 elasticsearch` (replace version with your version)
+
+You can also install via Homebrew: `brew install elasticsearch`
+
+> Note: for the 1.6 and greater upgrades of Elasticsearch, they want you to have java 8 or greater. I downloaded Java 8 from here http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html and it seemed to work great.
+
+
+**Start Elasticsearch**
+
+* Navigate to elasticsearch: `cd /usr/local/elasticsearch`
+* Start elasticsearch: `bin/elasticsearch`
+
+I create a little bash shortcut called `es` that does both of the above commands in one step (`cd /usr/local/elasticsearch && bin/elasticsearch`).
+
+__Note:__ Windows users should run the `elasticsearch.bat` file
+
+**Initialize connection**
+
+The function `connect()` is used before doing anything else to set the connection details to your remote or local elasticsearch store. The details created by `connect()` are written to your options for the current session, and are used by `elastic` functions.
+
+
+```r
+x <- connect()
+```
+
+On package load, your base url and port are set to `http://127.0.0.1` and `9200`, respectively. You can of course override these settings per session or for all sessions.
+
+**Get some data**
+
+Elasticsearch has a bulk load API to load data in fast. The format is pretty weird though. It's sort of JSON, but would pass no JSON linter. I include a few data sets in `elastic` so it's easy to get up and running, and so when you run examples in this package they'll actually run the same way (hopefully).
+
+I have prepare a non-exported function useful for preparing the weird format that Elasticsearch wants for bulk data loads, that is somewhat specific to PLOS data (See below), but you could modify for your purposes. See `make_bulk_plos()` and `make_bulk_gbif()` [here](https://github.com/ropensci/elastic/blob/master/R/docs_bulk.r).
+
+**Shakespeare data**
+
+Elasticsearch provides some data on Shakespeare plays. I've provided a subset of this data in this package. Get the path for the file specific to your machine:
+
+
+
+
+```r
+shakespeare <- system.file("examples", "shakespeare_data.json", package = "elastic")
+# If you're on Elastic v6 or greater, use this one with 1 type instead of 3:
+shakespeare <- system.file("examples", "shakespeare_data_.json", package = "elastic")
+```
+
+Then load the data into Elasticsearch:
+
+> make sure to create your connection object with `connect()`
+
+
+```r
+# x <- connect()  # do this now if you didn't do this above
+invisible(docs_bulk(x, shakespeare))
+```
+
+If you need some big data to play with, the shakespeare dataset is a good one to start with. You can get the whole thing and pop it into Elasticsearch (beware, may take up to 10 minutes or so.):
+
+```sh
+curl -XGET https://download.elastic.co/demos/kibana/gettingstarted/shakespeare_6.0.json > shakespeare.json
+curl -XPUT localhost:9200/_bulk --data-binary @shakespeare.json
+```
+
+**Public Library of Science (PLOS) data**
+
+A dataset inluded in the `elastic` package is metadata for PLOS scholarly articles. Get the file path, then load:
+
+
+```r
+if (index_exists(x, "plos")) index_delete(x, "plos")
+```
+
+```
+#> $acknowledged
+#> [1] TRUE
+```
+
+```r
+plosdat <- system.file("examples", "plos_data.json", package = "elastic")
+invisible(docs_bulk(x, plosdat))
+```
+
+
+
+**More data sets**
+
+There are more datasets formatted for bulk loading in the `ropensci/elastic_data` GitHub repository. Find it at <https://github.com/ropensci/elastic_data>
+
+### Search
+
+Search the `plos` index and only return 1 result
+
+
+```r
+Search(x, index = "plos", size = 1)$hits$hits
+```
+
+```
+#> [[1]]
+#> [[1]]$`_index`
+#> [1] "plos"
+#> 
+#> [[1]]$`_type`
+#> [1] "article"
+#> 
+#> [[1]]$`_id`
+#> [1] "0"
+#> 
+#> [[1]]$`_score`
+#> [1] 1
+#> 
+#> [[1]]$`_source`
+#> [[1]]$`_source`$id
+#> [1] "10.1371/journal.pone.0007737"
+#> 
+#> [[1]]$`_source`$title
+#> [1] "Phospholipase C-β4 Is Essential for the Progression of the Normal Sleep Sequence and Ultradian Body Temperature Rhythms in Mice"
+```
+
+Search the `plos` index, and the `article` document type, and query for _antibody_, limit to 1 result
+
+
+```r
+Search(x, index = "plos", type = "article", q = "antibody", size = 1)$hits$hits
+```
+
+```
+#> [[1]]
+#> [[1]]$`_index`
+#> [1] "plos"
+#> 
+#> [[1]]$`_type`
+#> [1] "article"
+#> 
+#> [[1]]$`_id`
+#> [1] "813"
+#> 
+#> [[1]]$`_score`
+#> [1] 5.18676
+#> 
+#> [[1]]$`_source`
+#> [[1]]$`_source`$id
+#> [1] "10.1371/journal.pone.0107638"
+#> 
+#> [[1]]$`_source`$title
+#> [1] "Sortase A Induces Th17-Mediated and Antibody-Independent Immunity to Heterologous Serotypes of Group A Streptococci"
+```
+
+
+#### A bool query
+
+
+```r
+mmatch <- '{
+ "query": {
+   "bool" : {
+     "must_not" : {
+       "range" : {
+         "speech_number" : {
+           "from" : 1, "to": 5
+}}}}}}'
+unlist(sapply(Search(x, index="shakespeare", body=mmatch)$hits$hits, function(x) x$`_source`$speech_number))
+```
+
+```
+#> [1] 6 6 7 7 7 7 7
+```
+
+#### Range query
+
+With numeric
+
+
+```r
+body <- list(query=list(range=list(decimalLongitude=list(gte=1, lte=3))))
+Search(x, 'gbif', body=body)$hits$total
+```
+
+```
+#> $value
+#> [1] 24
+#> 
+#> $relation
+#> [1] "eq"
+```
+
+With dates
+
+
+```r
+body <- list(query=list(range=list(eventDate=list(gte="2012-01-01", lte="now"))))
+Search(x, 'gbif', body=body)$hits$total
+```
+
+```
+#> $value
+#> [1] 301
+#> 
+#> $relation
+#> [1] "eq"
+```
+
+#### More-like-this query (more_like_this can be shortened to mlt)
+
+
+```r
+body <- '{
+ "query": {
+   "more_like_this": {
+     "fields": ["abstract","title"],
+     "like": "and then",
+     "min_term_freq": 1,
+     "max_query_terms": 12
+   }
+ }
+}'
+Search(x, 'plos', body=body)$hits$total
+```
+
+```
+#> $value
+#> [1] 488
+#> 
+#> $relation
+#> [1] "eq"
+```
+
+#### Highlighting
+
+
+```r
+body <- '{
+ "query": {
+   "query_string": {
+     "query" : "cell"
+   }
+ },
+ "highlight": {
+   "fields": {
+     "title": {"number_of_fragments": 2}
+   }
+ }
+}'
+out <- Search(x, 'plos', 'article', body=body)
+out$hits$total
+```
+
+```
+#> $value
+#> [1] 58
+#> 
+#> $relation
+#> [1] "eq"
+```
+
+
+```r
+sapply(out$hits$hits, function(x) x$highlight$title[[1]])[8:10]
+```
+
+```
+#> [1] "Functional Analysis of the Drosophila Embryonic Germ <em>Cell</em> Transcriptome by RNA Interference"
+#> [2] "Diversin Is Overexpressed in Breast Cancer and Accelerates <em>Cell</em> Proliferation and Invasion" 
+#> [3] "c-FLIP Protects Eosinophils from TNF-α-Mediated <em>Cell</em> Death In Vivo"
+```
+
+### Get documents
+
+Get document with id=4
+
+
+```r
+docs_get(x, index = 'plos', type = 'article', id = 4)
+```
+
+```
+#> $`_index`
+#> [1] "plos"
+#> 
+#> $`_type`
+#> [1] "article"
+#> 
+#> $`_id`
+#> [1] "4"
+#> 
+#> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 4
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
+#> $found
+#> [1] TRUE
+#> 
+#> $`_source`
+#> $`_source`$id
+#> [1] "10.1371/journal.pone.0107758"
+#> 
+#> $`_source`$title
+#> [1] "Lactobacilli Inactivate Chlamydia trachomatis through Lactic Acid but Not H2O2"
+```
+
+Get certain fields
+
+
+```r
+docs_get(x, index = 'plos', type = 'article', id = 4, fields = 'id')
+```
+
+```
+#> $`_index`
+#> [1] "plos"
+#> 
+#> $`_type`
+#> [1] "article"
+#> 
+#> $`_id`
+#> [1] "4"
+#> 
+#> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 4
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
+#> $found
+#> [1] TRUE
+```
+
+#### Get multiple documents at once
+
+Same index and type, different document ids
+
+
+```r
+docs_mget(x, index = "plos", type = "article", id = 1:2)
+```
+
+```
+#> $docs
+#> $docs[[1]]
+#> $docs[[1]]$`_index`
+#> [1] "plos"
+#> 
+#> $docs[[1]]$`_type`
+#> [1] "article"
+#> 
+#> $docs[[1]]$`_id`
+#> [1] "1"
+#> 
+#> $docs[[1]]$`_version`
+#> [1] 1
+#> 
+#> $docs[[1]]$`_seq_no`
+#> [1] 1
+#> 
+#> $docs[[1]]$`_primary_term`
+#> [1] 1
+#> 
+#> $docs[[1]]$found
+#> [1] TRUE
+#> 
+#> $docs[[1]]$`_source`
+#> $docs[[1]]$`_source`$id
+#> [1] "10.1371/journal.pone.0098602"
+#> 
+#> $docs[[1]]$`_source`$title
+#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+#> 
+#> 
+#> 
+#> $docs[[2]]
+#> $docs[[2]]$`_index`
+#> [1] "plos"
+#> 
+#> $docs[[2]]$`_type`
+#> [1] "article"
+#> 
+#> $docs[[2]]$`_id`
+#> [1] "2"
+#> 
+#> $docs[[2]]$`_version`
+#> [1] 1
+#> 
+#> $docs[[2]]$`_seq_no`
+#> [1] 2
+#> 
+#> $docs[[2]]$`_primary_term`
+#> [1] 1
+#> 
+#> $docs[[2]]$found
+#> [1] TRUE
+#> 
+#> $docs[[2]]$`_source`
+#> $docs[[2]]$`_source`$id
+#> [1] "10.1371/journal.pone.0107757"
+#> 
+#> $docs[[2]]$`_source`$title
+#> [1] "Cigarette Smoke Extract Induces a Phenotypic Shift in Epithelial Cells; Involvement of HIF1α in Mesenchymal Transition"
+```
+
+Different indeces, types, and ids
+
+
+```r
+docs_mget(x, index_type_id = list(c("plos", "article", 1), c("gbif", "record", 1)))$docs[[1]]
+```
+
+```
+#> $`_index`
+#> [1] "plos"
+#> 
+#> $`_type`
+#> [1] "article"
+#> 
+#> $`_id`
+#> [1] "1"
+#> 
+#> $`_version`
+#> [1] 1
+#> 
+#> $`_seq_no`
+#> [1] 1
+#> 
+#> $`_primary_term`
+#> [1] 1
+#> 
+#> $found
+#> [1] TRUE
+#> 
+#> $`_source`
+#> $`_source`$id
+#> [1] "10.1371/journal.pone.0098602"
+#> 
+#> $`_source`$title
+#> [1] "Population Genetic Structure of a Sandstone Specialist and a Generalist Heath Species at Two Levels of Sandstone Patchiness across the Strait of Gibraltar"
+```
+
+### Citing
+
+> Scott Chamberlain (2019). elastic: General Purpose Interface to Elasticsearch. R package version 1.0.0.
+  https://cran.rstudio.com/package=elastic
+
+
+### License and bugs
+
+* License: [MIT](http://opensource.org/licenses/MIT)
+* Report bugs at [our GitHub repo for elastic](https://github.com/ropensci/elastic/issues?state=open)
+
+
+[Back to top](#top)

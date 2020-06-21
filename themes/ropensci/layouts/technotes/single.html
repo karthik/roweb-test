@@ -1,0 +1,41 @@
+{{ define "main" }}
+
+<article class="blog-post">
+    <div class="container">
+        <div class="row">
+            <div class="col-8 top-12 mainpostlist">
+                <h1 style="text-align: center;">{{ .Title }}</h1>
+
+                <div class="bottom-5 top-10" style="font-size: 20px; text-align: center;">
+                    <p class="authors" style="text-align: center;">
+                        {{$authors := .Params.author}}
+                            {{ partial "authors.html" (dict "authors" $authors "Site" $.Site) }}
+                        <small style="color: #5B617A; margin-left: 10px;"> {{ .Date.Format "January 2, 2006" | upper }}</small>
+                    </p>
+                </div>
+
+               
+            <div class="top-2">
+
+                {{ if .Params.preface }}
+                <div class="alert alert-info" role="alert">{{ .Params.preface | markdownify }}</div>
+                {{ end }}
+
+                {{ .Content }}
+            </div>
+            <br>
+            <div class="top-4 labels" style="margin-left: 0px;">
+                {{ range .Params.tags }}
+                    <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}"><span class="label">{{ . }}</span></a>
+                {{ end }}
+        <br>
+ {{ partial "comments.html" (dict "Params" .Params "permalink" .Page.Permalink "year" (.Date.Format "2006") ) }}
+        </div>
+            </div>
+            {{ partial "technotebar.html" . }}
+        </div>
+        <br>
+    </div>
+</article>
+
+{{ end }}

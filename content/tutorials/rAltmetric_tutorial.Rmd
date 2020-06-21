@@ -1,0 +1,79 @@
+---
+title: rAltmetric tutorial
+package_version: 0.7.0
+---
+
+```{r, eval=TRUE, echo=FALSE}
+knitr::opts_chunk$set(
+	fig.path="img/tutorial-images/rAltmetric/",
+	comment = "#>",
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+This package provides a way to programmatically retrieve altmetric data from [altmetric.com](http://altmetric.com) for any publication with the appropriate identifer. The package is really simple to use and only has two major functions: One (`altmetrics()`) to download metrics and another (`altmetric_data()`) to extract the data into a `data.frame`. It also includes generic S3 methods to plot/print metrics for any altmetric object.
+
+Questions, features requests and issues should go [here](https://github.com/ropensci/rAltmetric/issues/). General comments to [karthik.ram@gmail.com](mailto:karthik.ram@gmail.com).
+
+
+### Installation
+
+
+A stable version is available from CRAN. To install
+
+```{r install, message=FALSE, warning=FALSE, eval=FALSE}
+install.packages('rAltmetric')
+```
+
+```{r installcran, message=FALSE, warning=FALSE, eval=FALSE}
+install.packages('devtools')
+devtools::install_github('ropensci/rAltmetric')
+```
+
+### Usage
+
+```{r}
+library(rAltmetric)
+library(magrittr)
+library(purrr)
+
+ids <- list(
+  "10.1038/nature09210",
+  "10.1126/science.1187820",
+  "10.1016/j.tree.2011.01.009",
+  "10.1086/664183"
+)
+
+alm <- function(x)  altmetrics(doi = x) %>% altmetric_data()
+
+results <- map_df(ids, alm)
+# This results in a data.frame with one row per identifier.
+```
+
+You can now see some citation data for these papers.
+
+```{r}
+library(dplyr)
+results %>% select(title, doi,  starts_with("cited"))
+```
+
+
+### Citing
+
+To cite `rAltmetric` in publications use:
+
+<br>
+
+> Karthik Ram (2017). rAltmetric: Retrieves Altmerics Data for Any
+  Published Paper from 'Altmetric.com'. R package version 0.7.0.
+  https://CRAN.R-project.org/package=rAltmetric
+
+
+### License and bugs
+
+* License: [MIT](http://opensource.org/licenses/MIT)
+* Report bugs at [our Github repo for rAltmetric](https://github.com/ropensci/rAltmetric/issues?state=open)
+
+[Back to top](#top)

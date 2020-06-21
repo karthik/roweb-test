@@ -1,0 +1,140 @@
+---
+title: spocc tutorial
+package_version: 0.7.0
+---
+
+```{r, eval=TRUE, echo=FALSE}
+knitr::opts_chunk$set(
+  fig.path = "img/tutorial-images/spocc/",
+  fig.width = 6,
+  fig.height = 4,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE
+)
+```
+
+
+### Installation
+
+Stable version from CRAN
+
+```{r eval=FALSE}
+install.packages("spocc")
+```
+
+Or dev version from GitHub
+
+```{r eval=FALSE}
+if (!require("devtools")) install.packages("devtools")
+install_github("ropensci/spocc")
+```
+
+```{r}
+library('spocc')
+```
+
+
+
+## Usage
+
+### Data retrieval
+
+The most significant function in spocc is the `occ` (short for occurrence) function. `occ` takes a query, often a species name, and searches across all data sources specified in the `from` argument. For example, one can search for all occurrences of [Sharp-shinned Hawks](http://www.allaboutbirds.org/guide/sharp-shinned_hawk/id) (_Accipiter striatus_) from the GBIF database with the following R call.
+
+```{r, gbif_simple_eg}
+library('spocc')
+(df <- occ(query = 'Accipiter striatus', from = 'gbif'))
+```
+
+The data returned are part of a `S3` class called `occdat`. This class has slots for each of the data sources described above. One can easily switch the source by changing the `from` parameter in the function call above.
+
+Within each data source is the set of species queried. In the above example, we only asked for occurrence data for one species, but we could have asked for any number. Let's say we asked for data for two species: _Accipiter striatus_, and _Pinus contorta_. Then the structure of the response would be
+
+```
+response -- |
+            | -- gbif ------- |
+                              | -- Accipiter_striatus
+                              | -- Pinus_contorta
+
+            | -- ecoengine -- |
+                              | -- Accipiter_striatus
+                              | -- Pinus_contorta
+
+            ... and so on for each data source
+
+```
+
+If you only request data from gbif, like `from = 'gbif'`, then the other four source slots are present in the response object, but have no data.
+
+You can quickly get just the GBIF data by indexing to it, like
+
+```{r getdataslot}
+df$gbif
+```
+
+When you get data from multiple providers, the fields returned are slightly different, e.g.:
+
+```{r difffields}
+df <- occ(query = 'Accipiter striatus', from = c('gbif', 'ecoengine'), limit = 25)
+head(df$gbif$data$Accipiter_striatus)[1:6,1:10]
+head(df$ecoengine$data$Accipiter_striatus)
+```
+
+We provide a function `occ2df` that pulls out a few key columns needed for making maps:
+
+```{r occ2df}
+head(occ2df(df))
+```
+
+
+### Fix names
+
+One problem you often run in to is that there can be various names for the same taxon in any one source. For example:
+
+```{r fixnames1}
+df <- occ(query = 'Pinus contorta', from = c('gbif', 'ecoengine'), limit = 50)
+head(df$gbif$data$Pinus_contorta)[1:6, 1:5]
+head(df$ecoengine$data$Pinus_contorta)[1:6, 1:5]
+```
+
+This is fine, but when trying to make a map in which points are colored for each taxon, you can have many colors for a single taxon, where instead one color per taxon is more appropriate. There is a function in `spocc` called `fixnames`, which has a few options in which you can take the shortest names (usually just the plain binomials like _Homo sapiens_), or the original name queried, or a vector of names supplied by the user.
+
+```{r fixnames2}
+df <- fixnames(df, how = 'shortest')
+head(df$gbif$data$Pinus_contorta[,1:2])
+head(df$ecoengine$data$Pinus_contorta[,1:2])
+df_comb <- occ2df(df)
+head(df_comb); tail(df_comb)
+```
+
+### Clean data
+
+All data cleaning functionality is in a new package [scrubr](https://github.com/ropenscilabs/scrubr). [On CRAN](https://cran.r-project.org/package=scrubr).
+
+### Make maps
+
+All mapping functionality is now in a separate package [mapr](https://github.com/ropensci/mapr) (formerly known as `spoccutils`), to make `spocc` easier to maintain. [On CRAN](https://cran.r-project.org/package=mapr).
+
+
+
+
+### Citing
+
+To cite `spocc` in publications use:
+
+<br>
+
+> Scott Chamberlain (2017). spocc: Interface to Species Occurrence Data
+  Sources. R package version 0.7.0.
+  https://CRAN.R-project.org/package=spocc
+
+
+
+### License and bugs
+
+* License: [MIT](http://opensource.org/licenses/MIT)
+* Report bugs at [our Github repo for spocc](https://github.com/ropensci/spocc/issues?state=open)
+
+[Back to top](#top)

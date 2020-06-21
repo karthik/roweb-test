@@ -1,0 +1,76 @@
+baseurl = "https://ropensci.org/"
+# languageCode = "en-us"
+title = "rOpenSci - open tools for open science"
+theme = "ropensci"
+googleAnalytics = "UA-462421-6"
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "_files$", "_cache$", "index\\.html"]
+footnotereturnlinkcontents = "↩"
+buildFuture = true
+preserveTaxonomyNames = true
+pygmentsUseClasses=true
+enableEmoji=true
+
+paginate = 5
+paginatePath = "page"
+rssLimit = 20
+
+[permalinks]
+    blog = "/blog/:year/:month/:day/:slug/"
+    technotes = "/technotes/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+[[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 4
+[[menu.main]]
+    name = "Subscribe"
+    url = "/index.xml"
+
+[params]
+    title = "rOpenSci"
+    description = "Open Tools and R Packages for Open Science"
+    footer = "&copy; The rOpenSci Project"
+    leadership = ["Carl Boettiger", "Karthik Ram", "Scott Chamberlain", "Jenny Bryan", "Rich FitzJohn", "Leadership Team", "Core Team"]
+    staff = ["Jeroen Ooms", "Stefanie Butland", "Maëlle Salmon", "Maelle Salmon", "Dan Sholler"]
+    blogs = ["blog", "technotes"]
+ 
+[taxonomies]
+  tag = "tags"
+  author = "author"
+  
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS", "JSON"]
+  taxonomy = ["HTML", "RSS", "JSON"]
+  taxonomyTerm = ["HTML", "RSS", "JSON"]
+
+[privacy]
+  [privacy.twitter]
+    disable = false
+    enableDNT = true
+    simple = false
+  [privacy.instagram]
+    disable = false
+    simple = true
+  [privacy.youtube]
+    disable = false
+    privacyEnhanced = true
+  [privacy.googleAnalytics]
+    anonymizeIP = true
+    disable = false
+    respectDoNotTrack = true
+    useSessionStorage = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

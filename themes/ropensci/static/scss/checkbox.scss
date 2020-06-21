@@ -1,0 +1,53 @@
+.checkbox-container{
+    position: relative;
+    display: flex;
+    cursor: pointer;
+  }
+
+  .checkmark {
+    position: relative;
+    left: 0;
+    height: 2.4rem;
+    width: 2.4rem;
+    background-color: transparent;
+    background-color: #FFF;
+    border-radius: 50%;
+    transition: 0.05s ease-in-out;
+    cursor: pointer;
+    z-index: 111;
+    border: 2px solid rgba(82, 92, 113, 0.2);
+    flex-shrink: 0;
+  }
+  
+  .checkbox-container input{
+    display: none;
+  }
+  
+  /* On mouse-over, add a grey background color
+  .checkbox-container:hover input ~ .checkmark {
+    background-color: #ff4a49;
+  } */
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+  }
+  
+  /* Show the checkmark when checked */
+  
+  /* Style the checkmark/indicator */
+  .checkbox-container .checkmark:after {
+    width: 1.525em;
+    height: 1.525em;
+    background-color: #1A5FD0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    border-radius: 50%;
+  }
+
+  .checkbox-container input:checked ~ .checkmark:after{
+      opacity: 1;
+  }

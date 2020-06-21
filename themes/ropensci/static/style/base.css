@@ -1,0 +1,32 @@
+html {
+  font-size: 10px; }
+
+body {
+  font-size: 100%;
+  font-family: proxima-nova, sans-serif;
+  background-color: #ECEDF2;
+  color: #484F5E; }
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto; }
+
+.footer-container {
+  max-width: 740px;
+  margin: 0 auto; }
+
+.sm-content-container {
+  padding-left: 8.1rem;
+  padding-right: 8.1rem; }
+
+section {
+  background-color: #ECEDF2; }
+
+.slick-slide {
+  outline: none; }
+
+button {
+  cursor: pointer; }
+
+button, input {
+  outline: none !important; }
